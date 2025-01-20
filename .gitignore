@@ -97,6 +97,7 @@ bld/
 [Ll]og/
 [Ll]ogs/
 cmake-build-debug/
+cmake-build-*/
 
 # Files built by Visual Studio
 *_i.c

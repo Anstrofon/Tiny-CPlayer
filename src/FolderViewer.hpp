@@ -104,7 +104,7 @@ public:
         });
     }
 
-    bool move_in_folders(Event& event)
+    bool move_in_filelist(Event& event)
     {   
         if(selected_file == 0 && !hidden.empty() && (event == Event::k || event == Event::ArrowUp))
         {
