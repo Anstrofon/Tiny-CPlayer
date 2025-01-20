@@ -1,0 +1,53 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"install_all_targets"
+		],
+		"files" : 
+		[
+			"cAudio/CMake/InstallDependencies.cmake",
+			"cAudio/DependenciesSource/libogg-1.2.2/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 25,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 1
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"cAudio/DependenciesSource/libogg-1.2.2/libOgg.a"
+			],
+			"targetId" : "Ogg::@317844153e73708c8d93",
+			"targetIndex" : 0,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "cAudio/DependenciesSource/libogg-1.2.2",
+		"source" : "cAudio/DependenciesSource/libogg-1.2.2"
+	}
+}

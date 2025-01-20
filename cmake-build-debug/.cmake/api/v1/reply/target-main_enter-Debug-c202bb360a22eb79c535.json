@@ -1,0 +1,232 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "main_enter"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"install",
+			"target_link_libraries"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt",
+			"cAudio/cAudio/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 33,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 47,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 37,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 20,
+				"parent" : 4
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -fdiagnostics-color=always"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/cmake-build-debug/_deps/ftxui-src/include"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "screen::@b65f64d0ea8424dee96a"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "dom::@b65f64d0ea8424dee96a"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "component::@b65f64d0ea8424dee96a"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "Ogg::@317844153e73708c8d93"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "Vorbis::@06b42cae3297bc3dfc8e"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "cAudio::@e141a168e946ef6e632b"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "cAp_mp3Decoder::@1de6a99d8de4c561623e"
+		}
+	],
+	"id" : "main_enter::@6890427a1f51a3e7e1df",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 2,
+				"path" : "bin"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "/usr/local"
+		}
+	},
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/cmake-build-debug/cAudio/Plugins/mp3Decoder:/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/cmake-build-debug/cAudio/cAudio:",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "_deps/ftxui-build/libftxui-screen.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "_deps/ftxui-build/libftxui-dom.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "_deps/ftxui-build/libftxui-component.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/lib/libopenal.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "cAudio/Plugins/mp3Decoder/libcAp_mp3Decoder.so.2.3.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-ltag",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "_deps/ftxui-build/libftxui-dom.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "_deps/ftxui-build/libftxui-screen.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "cAudio/cAudio/libcAudio.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/lib/libopenal.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "cAudio/DependenciesSource/libvorbis-1.3.2/libVorbis.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "cAudio/DependenciesSource/libogg-1.2.2/libOgg.a",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "main_enter",
+	"nameOnDisk" : "main_enter",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/main.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

@@ -1,0 +1,319 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						4
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-283e4927501421beb7da.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.11"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"build" : "_deps/ftxui-build",
+					"childIndexes" : 
+					[
+						2,
+						3
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-_deps.ftxui-build-Debug-e83684403d69b54fd79c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "cmake-build-debug/_deps/ftxui-src",
+					"targetIndexes" : 
+					[
+						4,
+						5,
+						7
+					]
+				},
+				{
+					"build" : "_deps/ftxui-build/examples",
+					"jsonFile" : "directory-_deps.ftxui-build.examples-Debug-78a21d2e33f1dac5e9ff.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "cmake-build-debug/_deps/ftxui-src/examples"
+				},
+				{
+					"build" : "_deps/ftxui-build/doc",
+					"jsonFile" : "directory-_deps.ftxui-build.doc-Debug-c8ea5924ec39e064a862.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "cmake-build-debug/_deps/ftxui-src/doc"
+				},
+				{
+					"build" : "cAudio",
+					"childIndexes" : 
+					[
+						5,
+						6,
+						7,
+						8
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-cAudio-Debug-8ebdb90eef95e0fd28d7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "cAudio"
+				},
+				{
+					"build" : "cAudio/DependenciesSource/libogg-1.2.2",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-cAudio.DependenciesSource.libogg-1.2.2-Debug-d00786240994aa9ba63c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 3,
+					"source" : "cAudio/DependenciesSource/libogg-1.2.2",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "cAudio/DependenciesSource/libvorbis-1.3.2",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-cAudio.DependenciesSource.libvorbis-1.3.2-Debug-243429842ff7eced537f.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 4,
+					"source" : "cAudio/DependenciesSource/libvorbis-1.3.2",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "cAudio/cAudio",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-cAudio.cAudio-Debug-a656ff4aaba6f041cf47.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 2,
+					"source" : "cAudio/cAudio",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "cAudio/Plugins/mp3Decoder",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-cAudio.Plugins.mp3Decoder-Debug-1cfb1be272627d97a904.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 5,
+					"source" : "cAudio/Plugins/mp3Decoder",
+					"targetIndexes" : 
+					[
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "tiny_cplayer",
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"name" : "ftxui",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						4,
+						5,
+						7
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						3,
+						4,
+						5
+					],
+					"directoryIndexes" : 
+					[
+						4,
+						7
+					],
+					"name" : "cAudio",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5
+					],
+					"name" : "Ogg",
+					"parentIndex" : 2,
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						6
+					],
+					"name" : "Vorbis",
+					"parentIndex" : 2,
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						8
+					],
+					"name" : "cAp_mp3Decoder",
+					"parentIndex" : 2,
+					"targetIndexes" : 
+					[
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 5,
+					"id" : "Ogg::@317844153e73708c8d93",
+					"jsonFile" : "target-Ogg-Debug-79733c39c82d6f4bb85b.json",
+					"name" : "Ogg",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "Vorbis::@06b42cae3297bc3dfc8e",
+					"jsonFile" : "target-Vorbis-Debug-aeb70838b9f22f36a3ae.json",
+					"name" : "Vorbis",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "cAp_mp3Decoder::@1de6a99d8de4c561623e",
+					"jsonFile" : "target-cAp_mp3Decoder-Debug-bcaf30e686532a7ae5f2.json",
+					"name" : "cAp_mp3Decoder",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "cAudio::@e141a168e946ef6e632b",
+					"jsonFile" : "target-cAudio-Debug-8c0095570bf3b6670dad.json",
+					"name" : "cAudio",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "component::@b65f64d0ea8424dee96a",
+					"jsonFile" : "target-component-Debug-68fec10ee032bf5b4729.json",
+					"name" : "component",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "dom::@b65f64d0ea8424dee96a",
+					"jsonFile" : "target-dom-Debug-75eaba132d2918ca4a58.json",
+					"name" : "dom",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "main_enter::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-main_enter-Debug-c202bb360a22eb79c535.json",
+					"name" : "main_enter",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "screen::@b65f64d0ea8424dee96a",
+					"jsonFile" : "target-screen-Debug-cbccb48713c21e12bbe1.json",
+					"name" : "screen",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/cmake-build-debug",
+		"source" : "/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
