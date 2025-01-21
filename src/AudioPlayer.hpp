@@ -31,17 +31,6 @@ class AudioPlayer
     ftxui::Component btn_playing;
     cAudio::IAudioManager* audioMgr;
 
-    static bool find_endinig(std::string const &fullString, std::string const &ending)
-    {
-        if (fullString.length() >= ending.length())
-        {
-            return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
-        }
-        else
-        {
-            return false;
-        }
-    }
 
 public:
     bool first_run;
