@@ -29,40 +29,35 @@ class FolderViewer
     bool menu_2_show = false;
     std::weak_ptr<AudioPlayer> observer;
 
-    std::size_t number_of_files_in_directory()
+    void set_title(const File& file)
     {
-        using std::filesystem::directory_iterator;
-        return std::distance(directory_iterator(directorypath), directory_iterator{});
-    }
+        TagLib::FileRef fileref(file.get_path().c_str()); //TagLib::FileRef fileref(directorypath.c_str());
 
-    void set_title(const std::string& tit)
-    {
-        TagLib::FileRef file(directorypath.c_str());
-
-        directorypath.remove_filename();
-        if(file.tag()->title().isEmpty())
+        //directorypath.remove_filename();
+        if(fileref.tag()->title().isEmpty())
         {
-            title = tit;
+            title = file.get_filename();
         }
-        else 
+
+        else
         {
-            title = file.tag()->title().toCString(true);
+            title = fileref.tag()->title().toCString(true);
         }
     }
 
 
     void set_file_list()
-    {   
-        if (!filelist.empty()) 
-        { 
+    {
+        if (!filelist.empty())
+        {
             filelist.clear();
         }
 
         std::vector<std::string> folders;
         for (const auto& entry : directory_iterator(directorypath))
-        {   
+        {
             File file(entry.path().string());
-            
+
             if (!is_directory(entry) && file.is_audio())
             {
                 filelist.emplace_back(entry.path().filename().string());
@@ -113,7 +108,7 @@ class FolderViewer
                 observer.lock()->change_file(file);
             }
 
-            set_title(filelist[selected_file]);
+            set_title(file);
         }
         else
         {
@@ -141,29 +136,27 @@ public:
 
 
     bool input_to_filelist_menu(Event& event)
-    {   
+    {
         if(selected_file == 0 && !hidden.empty() && (event == Event::k || event == Event::ArrowUp))
         {
-            scroll_down();
+            scroll_up();
             return true;
         }
         if(selected_file > 10 && (event == Event::j || event == Event::ArrowDown))
-        {   
+        {
             //selected_file = 10;
-            scroll_up();
-
+            scroll_down();
             return true;
         }
 
         if (event == Event::l  || event == Event::ArrowRight)
-        {           
+        {
             if (filelist[selected_file] == "..")
             {
                 if(directorypath.string() == "/")
                 {
                     return false;
                 }
-
                 move_backward();
             }
             else
@@ -175,7 +168,6 @@ public:
             set_file_list();
             return true;
         }
-
         return false;
     }
 

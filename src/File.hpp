@@ -11,6 +11,11 @@ public:
 
     File() = default;
 
+    [[nodiscard]] std::string get_filename() const
+    {
+        return filename;
+    }
+
     [[nodiscard]] std::string get_path() const
     {
         return path;
