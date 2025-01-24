@@ -87,6 +87,40 @@ class FolderViewer
         temp.pop_back();
         directorypath = temp;
     }
+
+    void scroll_up()
+    {
+        selected_file = 0;
+
+        filelist.insert(filelist.begin(), hidden.back());
+        hidden.pop_back();
+    }
+
+    void scroll_down()
+    {
+        hidden.emplace_back(filelist[0]);
+        filelist.erase(filelist.begin());
+    }
+
+    void interact_with_selected_file()
+    {
+        File file(directorypath.string() + "/" + filelist[selected_file]);
+
+        if(file.is_audio())
+        {
+            if(observer.lock())
+            {
+                observer.lock()->change_file(file);
+            }
+
+            set_title(filelist[selected_file]);
+        }
+        else
+        {
+            directorypath.append(filelist[selected_file]);
+        }
+    }
+
 public:
 
     FolderViewer()
@@ -104,22 +138,19 @@ public:
         });
     }
 
-    bool move_in_filelist(Event& event)
+
+
+    bool input_to_filelist_menu(Event& event)
     {   
         if(selected_file == 0 && !hidden.empty() && (event == Event::k || event == Event::ArrowUp))
         {
-            selected_file = 0;
-            
-            filelist.insert(filelist.begin(), hidden.back());
-            hidden.pop_back(); 
+            scroll_down();
             return true;
         }
         if(selected_file > 10 && (event == Event::j || event == Event::ArrowDown))
         {   
             //selected_file = 10;
-            
-            hidden.emplace_back(filelist[0]);
-            filelist.erase(filelist.begin());
+            scroll_up();
 
             return true;
         }
@@ -127,7 +158,7 @@ public:
         if (event == Event::l  || event == Event::ArrowRight)
         {           
             if (filelist[selected_file] == "..")
-            {   
+            {
                 if(directorypath.string() == "/")
                 {
                     return false;
@@ -136,22 +167,8 @@ public:
                 move_backward();
             }
             else
-            {   
-                File file(directorypath.string() + "/" + filelist[selected_file]);
-                
-                if(file.is_audio())
-                {   
-                    if(observer.lock())
-                    {
-                        observer.lock()->change_file(file);
-                    }
-
-                    set_title(filelist[selected_file]);
-                }
-                else 
-                {
-                    directorypath.append(filelist[selected_file]);
-                }
+            {
+                interact_with_selected_file();
                 return true;
             }
             hidden.clear();

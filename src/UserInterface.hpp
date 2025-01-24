@@ -64,7 +64,7 @@ public:
         // Контейнер для навігації у папках
         auto folder_container = CatchEvent(_folder_viewer.get_layout(), [&](Event event)
         {
-            return _folder_viewer.move_in_filelist(event);
+            return _folder_viewer.input_to_filelist_menu(event);
         });
 
         // Об'єднання контейнерів в один
