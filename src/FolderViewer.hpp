@@ -52,6 +52,10 @@ class FolderViewer
         {
             filelist.clear();
         }
+        if(!hidden.empty())
+        {
+            hidden.clear();
+        }
 
         std::vector<std::string> folders;
         for (const auto& entry : directory_iterator(directorypath))
@@ -101,18 +105,15 @@ class FolderViewer
     {
         File file(directorypath.string() + "/" + filelist[selected_file]);
 
-        if(file.is_audio())
+        if(file.is_audio() && observer.lock())
         {
-            if(observer.lock())
-            {
-                observer.lock()->change_file(file);
-            }
-
+            observer.lock()->change_file(file);
             set_title(file);
         }
         else
         {
-            directorypath.append(filelist[selected_file]);
+            std::string folder =  filelist[selected_file].substr(folder_icon.length());
+            directorypath.append(folder);
         }
     }
 
@@ -162,9 +163,8 @@ public:
             else
             {
                 interact_with_selected_file();
-                return true;
             }
-            hidden.clear();
+            // hidden.clear();
             set_file_list();
             return true;
         }
