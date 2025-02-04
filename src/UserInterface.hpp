@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <iostream>
 #define LENGTH_X 100
 #define LENGTH_Y 20
 
@@ -45,22 +46,22 @@ class UserInterface
     FolderViewer _folder_viewer;
     std::shared_ptr<AudioPlayer> _audio_player;
 
-    
+
     std::atomic<bool> running{true}; // Контроль потоку
 
 public:
 
     // initialize the general player's UI
-    UserInterface(std::string& filename, cAudio::IAudioManager* audioMgr) 
-    : filename(filename) 
+    UserInterface(std::string& filename, cAudio::IAudioManager* audioMgr)
+    : filename(filename)
     {
         File _file(filename);
         _audio_player = std::make_shared<AudioPlayer>(_file, audioMgr);
-        
+
         btn_playing = _audio_player->get_button();
 
         _folder_viewer = FolderViewer(_audio_player, _file.get_path());
-        
+
         // Контейнер для навігації у папках
         auto folder_container = CatchEvent(_folder_viewer.get_layout(), [&](Event event)
         {
@@ -74,8 +75,8 @@ public:
             folder_container
         });
 
-        //final look    
-        rendered_ui = Renderer(main_container, [&] 
+        //final look
+        rendered_ui = Renderer(main_container, [&]
         {
             return vbox(
             {hbox(
@@ -88,24 +89,20 @@ public:
              folder_container->Render()
            });
         });
-
         auto screene = ScreenInteractive::FixedSize(LENGTH_X, LENGTH_Y);
-        
+
         // Потік для регулярного оновлення
         std::thread([&]()
         {
-            while (running.load()) 
+            while (running.load())
             {
                 screene.PostEvent(Event::Custom); // Викликаємо оновлення
                 std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Затримка 50 мс
             }
         }).detach();
         screene.Loop(rendered_ui);  /* yes, it's looping inside the class ui -_- */
+    }
 
-        // Зупиняємо потік після завершення
-        running.store(false);
-    }    
-    
     ~UserInterface()
     {
         // Зупиняємо потік після завершення

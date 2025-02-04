@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ftxui/component/event.hpp>
+#include <iostream>
 #include <memory>
 #include "AudioPlayer.hpp"
 #include <string>
@@ -31,9 +32,7 @@ class FolderViewer
 
     void set_title(const File& file)
     {
-        TagLib::FileRef fileref(file.get_path().c_str()); //TagLib::FileRef fileref(directorypath.c_str());
-
-        //directorypath.remove_filename();
+        TagLib::FileRef fileref(file.get_path().c_str());
         if(fileref.tag()->title().isEmpty())
         {
             title = file.get_filename();
@@ -90,7 +89,6 @@ class FolderViewer
     void scroll_up()
     {
         selected_file = 0;
-
         filelist.insert(filelist.begin(), hidden.back());
         hidden.pop_back();
     }
@@ -117,11 +115,27 @@ class FolderViewer
         }
     }
 
+    void set_path(std::string path)
+    {
+        if(!std::filesystem::exists(directorypath))
+        {
+            std::cerr << "Directory does not exist: " << directorypath << '\n';
+            path = ".";
+        }
+
+        if(this->directorypath.is_relative())
+        {
+            this->directorypath = std::filesystem::absolute(this->directorypath);
+            if (path == "." || path == "..")
+            {
+                move_backward();
+            }
+        }
+    }
 public:
 
     FolderViewer()
-    {
-    }
+    = default;
 
     std::string title = " ";
 
@@ -134,8 +148,6 @@ public:
         });
     }
 
-
-
     bool input_to_filelist_menu(Event& event)
     {
         if(selected_file == 0 && !hidden.empty() && (event == Event::k || event == Event::ArrowUp))
@@ -145,7 +157,6 @@ public:
         }
         if(selected_file > 10 && (event == Event::j || event == Event::ArrowDown))
         {
-            //selected_file = 10;
             scroll_down();
             return true;
         }
@@ -164,7 +175,6 @@ public:
             {
                 interact_with_selected_file();
             }
-            // hidden.clear();
             set_file_list();
             return true;
         }
@@ -174,14 +184,7 @@ public:
     FolderViewer(const std::shared_ptr<AudioPlayer>& observer, const std::string& input_path) : observer(observer),
     directorypath(input_path)
     {
-        if(this->directorypath.is_relative())
-        {
-            this->directorypath = std::filesystem::absolute(this->directorypath);
-            if (input_path == ".")
-            {
-                move_backward();
-            }
-        }
+        set_path(input_path);
         set_file_list();
     }
 };

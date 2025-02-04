@@ -18,8 +18,7 @@ int main(int argc, char* argv[])
   std::string filename = ".";
   if (argc > 1)
   {
-    filename = "/";
-    filename =+ argv[1];
+    filename = argv[1];
   }
   UserInterface user_interface(filename, audioMgr);
 

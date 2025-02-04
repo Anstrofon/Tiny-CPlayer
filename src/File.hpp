@@ -1,5 +1,4 @@
 #include <string>
-#include <iostream>
 
 class File
 {
@@ -38,9 +37,9 @@ public:
     }
 
     bool is_audio()
-    {   
-        return extension == "mp3" || extension == "wav" 
-                                  || extension == "ogg" 
+    {
+        return extension == "mp3" || extension == "wav"
+                                  || extension == "ogg"
                                   || extension == "raw";
     }
 };
