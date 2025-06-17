@@ -30,20 +30,6 @@ class FolderViewer
     bool menu_2_show = false;
     std::weak_ptr<AudioPlayer> observer;
 
-    void set_title(const File& file)
-    {
-        TagLib::FileRef fileref(file.get_path().c_str());
-        if(fileref.tag()->title().isEmpty())
-        {
-            title = file.get_filename();
-        }
-
-        else
-        {
-            title = fileref.tag()->title().toCString(true);
-        }
-    }
-
 
     void set_file_list()
     {
@@ -106,7 +92,7 @@ class FolderViewer
         if(file.is_audio() && observer.lock())
         {
             observer.lock()->change_file(file);
-            set_title(file);
+            observer.lock()->set_title(file);
         }
         else
         {
@@ -137,8 +123,6 @@ public:
     FolderViewer()
     = default;
 
-    std::string title = " ";
-
     Component get_layout()
     {
         return Container::Vertical(
@@ -163,6 +147,7 @@ public:
 
         if (event == Event::l  || event == Event::ArrowRight)
         {
+            // Якщо користувач обрав "назад"
             if (filelist[selected_file] == "..")
             {
                 if(directorypath.string() == "/")
@@ -171,7 +156,7 @@ public:
                 }
                 move_backward();
             }
-            else
+            else // або файл чи теку
             {
                 interact_with_selected_file();
             }

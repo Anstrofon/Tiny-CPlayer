@@ -16,7 +16,6 @@
 #include "taglib/fileref.h"
 #include "taglib/tag.h"
 
-#include <chrono>
 #include "Timer.hpp"
 #include "File.hpp"
 
@@ -27,7 +26,7 @@ class AudioPlayer
     File filename;
     int final_seconds = 0;
     cAudio::IAudioSource* mysound;
-    
+
     ftxui::Component btn_playing;
     cAudio::IAudioManager* audioMgr;
 
@@ -37,10 +36,25 @@ public:
     Timer timer;
     TagLib::AudioProperties *properties;
 
+    std::string title = " ";
+
+    void set_title(const File& file)
+    {
+        TagLib::FileRef fileref(file.get_path().c_str());
+        if(fileref.tag()->title().isEmpty())
+        {
+            title = file.get_filename();
+        }
+        else
+        {
+            title = fileref.tag()->title().toCString(true);
+        }
+    }
+
     void rewind(const float&& seconds)
-    {   
+    {
         if (mysound == nullptr) return;
-        
+
         float current_seconds = timer.elapsedSeconds();
 
         if (current_seconds + seconds > final_seconds || current_seconds + seconds < 0)  return;
@@ -49,10 +63,11 @@ public:
         timer.add_seconds(seconds);
     }
     float progress_bar(bool set_progress = false)
-    {   
+    {
         if (mysound == nullptr) return 0;
 
         TagLib::FileRef file(filename.get_path().c_str());
+
         TagLib::AudioProperties *properties = file.audioProperties();
 
         final_seconds = properties->lengthInSeconds();
@@ -72,8 +87,11 @@ public:
     }
 
     std::string time_stamp_audio()
-    {   
-        if(mysound == nullptr) return "00:00";
+    {
+        if(mysound == nullptr)
+        {
+            return "00:00";
+        }
 
         TagLib::FileRef file(filename.get_path().c_str());
 
@@ -87,7 +105,7 @@ public:
         {
             result = "0" + std::to_string(minutes) + ":";
         }
-        else 
+        else
         {
             result = std::to_string(minutes) + ":";
         }
@@ -96,16 +114,16 @@ public:
         {
             result += "0" + std::to_string(seconds);
         }
-        else 
+        else
         {
             result += std::to_string(seconds);
         }
 
-        return result; 
+        return result;
     }
 
     void play_button()
-    {   
+    {
         if (mysound == nullptr) return;
 
         if (label == " ▶ ")
@@ -130,10 +148,10 @@ public:
             label = " ▶ ";
         }
     }
-    
-    AudioPlayer(const File& filename, cAudio::IAudioManager* audioMgr) : 
+
+    AudioPlayer(const File& filename, cAudio::IAudioManager* audioMgr) :
         filename(filename), audioMgr(audioMgr), first_run(true)
-    {   
+    {
         if(this->filename.is_audio())
         {
             mysound = audioMgr->create("song", filename.get_path().c_str(),true);
@@ -142,7 +160,7 @@ public:
         {
             mysound = nullptr;
         }
-        
+
         //set button interactions
         btn_playing = ftxui::Container::Horizontal({
         Button(" << ", [&] {rewind(-5); }, ftxui::ButtonOption::Border()),
@@ -150,24 +168,26 @@ public:
         Button(" >> ", [&] { rewind(5); }, ftxui::ButtonOption::Border() )
         });
     }
-    
+
     void change_file(const File& filename)
     {
         this->filename = filename;
-        
+
         if (mysound != nullptr)
         {
-            if(!mysound->isStopped()) mysound->stop();
+            if(!mysound->isStopped())
+            {
+                mysound->stop();
+            }
         }
-        
+
         mysound = audioMgr->create("song", filename.get_path().c_str(),true);
         timer.reset();
         first_run = true;
     }
-    
+
     ftxui::Component get_button()
     {
         return btn_playing;
     }
-    
 };

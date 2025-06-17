@@ -29,6 +29,10 @@ endif()
 
 
 find_package(Taglib REQUIRED)
+
+FIND_PACKAGE( OpenCV REQUIRED )
+INCLUDE_DIRECTORIES( ${OpenCV_INCLUDE_DIRS} )
+
 # Add the main executable
 add_executable(main_enter src/main.cpp)
 
@@ -42,6 +46,8 @@ target_link_libraries(main_enter
   ${OPENAL_LIBRARY}
   PRIVATE cAp_mp3Decoder
   PRIVATE tag
+  ${OpenCV_LIBS}
 )
+
 # Installation settings
 install(TARGETS main_enter RUNTIME DESTINATION bin)

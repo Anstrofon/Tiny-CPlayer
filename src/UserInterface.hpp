@@ -34,26 +34,22 @@ using namespace ftxui;
  */
 class UserInterface
 {
+    cAudio::IAudioSource* mysound{};
+    std::shared_ptr<AudioPlayer> _audio_player;
+    Component btn_playing;
+    Component folder_container;
+    Component rendered_ui;
+    // initialize the general player's UI
+    FolderViewer _folder_viewer;
+
     std::string label = " ▶ ";
 
     std::string filename;
-    Component btn_playing;
-
-    cAudio::IAudioSource* mysound{};
-    Component rendered_ui;
-
-    // initialize the general player's UI
-    FolderViewer _folder_viewer;
-    std::shared_ptr<AudioPlayer> _audio_player;
-
 
     std::atomic<bool> running{true}; // Контроль потоку
 
-public:
 
-    // initialize the general player's UI
-    UserInterface(std::string& filename, cAudio::IAudioManager* audioMgr)
-    : filename(filename)
+    void initialize_ui_components(cAudio::IAudioManager* audioMgr)
     {
         File _file(filename);
         _audio_player = std::make_shared<AudioPlayer>(_file, audioMgr);
@@ -63,11 +59,13 @@ public:
         _folder_viewer = FolderViewer(_audio_player, _file.get_path());
 
         // Контейнер для навігації у папках
-        auto folder_container = CatchEvent(_folder_viewer.get_layout(), [&](Event event)
+        folder_container = CatchEvent(_folder_viewer.get_layout(), [&](Event event)
         {
             return _folder_viewer.input_to_filelist_menu(event);
         });
-
+    }
+    void create_screen()
+    {
         // Об'єднання контейнерів в один
         auto main_container = Container::Vertical(
         {
@@ -85,10 +83,22 @@ public:
                 gauge(_audio_player->progress_bar())| border | flex,
                 text(_audio_player->timer.printElapsedTime(_audio_player->first_run) + "/" + _audio_player->time_stamp_audio())  | border,
                 }),
-             text(_folder_viewer.title) | border,
+             text(_audio_player->title) | border,
              folder_container->Render()
            });
         });
+    }
+
+public:
+
+    // initialize the general player's UI
+    UserInterface(std::string& filename, cAudio::IAudioManager* audioMgr)
+    : filename(filename)
+    {
+
+        initialize_ui_components(audioMgr);
+        create_screen();
+
         auto screene = ScreenInteractive::FixedSize(LENGTH_X, LENGTH_Y);
 
         // Потік для регулярного оновлення
