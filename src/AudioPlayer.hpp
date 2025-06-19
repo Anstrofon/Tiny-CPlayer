@@ -1,3 +1,4 @@
+#pragma once
 #define LENGTH_X 100
 #define LENGTH_Y 20
 
@@ -23,15 +24,21 @@ class AudioPlayer
 {
     std::string label = " ▶ ";
 
-    File filename;
     int final_seconds = 0;
     cAudio::IAudioSource* mysound;
 
     ftxui::Component btn_playing;
     cAudio::IAudioManager* audioMgr;
 
+    File filename;
+
 
 public:
+
+    [[nodiscard]] File get_file() const
+    {
+        return filename;
+    }
     bool first_run;
     Timer timer;
     TagLib::AudioProperties *properties;

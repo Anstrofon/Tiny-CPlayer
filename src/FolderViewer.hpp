@@ -1,11 +1,9 @@
 #include <algorithm>
-#include <cstdlib>
 #include <ftxui/component/event.hpp>
 #include <iostream>
 #include <memory>
 #include "AudioPlayer.hpp"
 #include <string>
-#include <utility>
 
 #include <vector>
 #include <filesystem>
@@ -134,6 +132,10 @@ public:
 
     bool input_to_filelist_menu(Event& event)
     {
+        if(!menu_2_show)
+        {
+            return false;
+        }
         if(selected_file == 0 && !hidden.empty() && (event == Event::k || event == Event::ArrowUp))
         {
             scroll_up();

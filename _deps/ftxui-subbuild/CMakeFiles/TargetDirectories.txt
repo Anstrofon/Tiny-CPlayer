@@ -1,0 +1,3 @@
+/home/anstrofon/Стільниця/c++/test/_deps/ftxui-subbuild/CMakeFiles/ftxui-populate.dir
+/home/anstrofon/Стільниця/c++/test/_deps/ftxui-subbuild/CMakeFiles/edit_cache.dir
+/home/anstrofon/Стільниця/c++/test/_deps/ftxui-subbuild/CMakeFiles/rebuild_cache.dir

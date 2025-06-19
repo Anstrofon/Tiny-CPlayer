@@ -1,0 +1,15 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/cmake_install.cmake",
+		"/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/_deps/ftxui-build/cmake_install.cmake",
+		"/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/_deps/ftxui-build/doc/cmake_install.cmake",
+		"/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/_deps/ftxui-build/examples/cmake_install.cmake",
+		"/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/cAudio/cmake_install.cmake",
+		"/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/cAudio/DependenciesSource/libogg-1.2.2/cmake_install.cmake",
+		"/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/cAudio/DependenciesSource/libvorbis-1.3.2/cmake_install.cmake",
+		"/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/cAudio/cAudio/cmake_install.cmake",
+		"/home/anstrofon/\u0421\u0442\u0456\u043b\u044c\u043d\u0438\u0446\u044f/c++/test/cAudio/Plugins/mp3Decoder/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

@@ -1,7 +1,6 @@
-#include <cstddef>
 #include <iostream>
 #define LENGTH_X 100
-#define LENGTH_Y 20
+#define LENGTH_Y 40
 
 #include <string>
 
@@ -16,10 +15,9 @@
 
 #include "taglib/fileref.h"
 #include "taglib/tag.h"
-
 #include "FolderViewer.hpp"
+#include "SavedMusicList.hpp"
 
-//#include "AudioPlayer.hpp"
 
 #include <thread>
 #include <atomic>
@@ -39,9 +37,11 @@ class UserInterface
     Component btn_playing;
     Component folder_container;
     Component rendered_ui;
+    Component favourites_btn;
+    Component favourites_container;
     // initialize the general player's UI
     FolderViewer _folder_viewer;
-
+    SavedMusicList _favourites;
     std::string label = " ▶ ";
 
     std::string filename;
@@ -58,10 +58,17 @@ class UserInterface
 
         _folder_viewer = FolderViewer(_audio_player, _file.get_path());
 
+        _favourites = SavedMusicList(_audio_player);
+        favourites_btn = _favourites.get_button();
+
         // Контейнер для навігації у папках
         folder_container = CatchEvent(_folder_viewer.get_layout(), [&](Event event)
         {
             return _folder_viewer.input_to_filelist_menu(event);
+        });
+        favourites_container = CatchEvent(_favourites.get_layout(), [&](Event event)
+        {
+            return _favourites.input_to_favourites_menu(event);
         });
     }
     void create_screen()
@@ -70,9 +77,10 @@ class UserInterface
         auto main_container = Container::Vertical(
         {
             btn_playing,
-            folder_container
+            favourites_btn,
+            folder_container,
+            favourites_container,
         });
-
         //final look
         rendered_ui = Renderer(main_container, [&]
         {
@@ -82,9 +90,11 @@ class UserInterface
                 btn_playing->Render(),
                 gauge(_audio_player->progress_bar())| border | flex,
                 text(_audio_player->timer.printElapsedTime(_audio_player->first_run) + "/" + _audio_player->time_stamp_audio())  | border,
+                favourites_btn->Render(),
                 }),
              text(_audio_player->title) | border,
-             folder_container->Render()
+             folder_container->Render(),
+             favourites_container->Render(),
            });
         });
     }

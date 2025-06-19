@@ -1,5 +1,5 @@
 #include <string>
-
+#pragma once
 class File
 {
     std::string filename;
