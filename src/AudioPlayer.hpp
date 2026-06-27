@@ -12,7 +12,7 @@
 #include <ftxui/screen/screen.hpp>
 #include "ftxui/component/screen_interactive.hpp"
 
-#include "miniaudio.h"
+#include "libs/miniaudio.h"
 
 #include "taglib/fileref.h"
 #include "taglib/tag.h"
@@ -126,7 +126,7 @@ public:
 
         if (current_seconds + seconds > final_seconds || current_seconds + seconds < 0)  return;
 
-        mysound.seek( /*current_seconds +*/ seconds);
+        mysound.seek(seconds);
         timer.add_seconds(seconds);
     }
 
