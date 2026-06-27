@@ -1,4 +1,3 @@
-
 #include <vector>
 #include <filesystem>
 #include <fstream>
@@ -11,12 +10,12 @@ using namespace ftxui;
 
 class SavedMusicList
 {
+    std::weak_ptr<AudioPlayer> observer;
     std::vector<std::string> favourites;
     std::vector<std::string> hidden;
-    int selected_file = -1;
-    std::weak_ptr<AudioPlayer> observer;
-    bool menu_2_show = false;
     std::string label_heart = "";
+    int selected_file = -1;
+    bool menu_2_show = false;
 
     void reload_txt()
     {
@@ -81,8 +80,6 @@ class SavedMusicList
         return true;
     }
 
-
-// TODO: розробити функцію для читання-збереження в файл
     void save_favourites(const File& file)
     {
         // TODO: зберегти в файл
@@ -96,7 +93,6 @@ class SavedMusicList
             text << file.get_path() << '\n';
             text.close();
         }
-
     }
 
     void load_favourites()

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.11)
 
-project(tiny_cplayer LANGUAGES CXX VERSION 1.0.0)
+project(tiny_cplayer LANGUAGES CXX VERSION 0.2.0)
 
 include(FetchContent)
 
@@ -13,42 +13,31 @@ FetchContent_Declare(ftxui
 FetchContent_MakeAvailable(ftxui)
 
 
-
-# Include cAudio custom CMakeLists.txt
-add_subdirectory(${CMAKE_SOURCE_DIR}/cAudio )
-
 #add_subdirectory(${CMAKE_SOURCE_DIR}/taglib)
 
 # Find and include OpenAL library
-find_package(OpenAL REQUIRED)
-if(NOT OpenAL_FOUND)
-    set(OPENAL_INCLUDE_DIR /usr/include/AL)
-    set(OPENAL_LIBRARY /usr/lib/libopenal.so)
-endif()
+# find_package(OpenAL REQUIRED)
+# if(NOT OpenAL_FOUND)
+#     set(OPENAL_INCLUDE_DIR /usr/include/AL)
+#     set(OPENAL_LIBRARY /usr/lib/libopenal.so)
+# endif()
 
 
 
 find_package(Taglib REQUIRED)
-#find_package(cAudio REQUIRED)
-
-#FIND_PACKAGE( OpenCV REQUIRED )
-#INCLUDE_DIRECTORIES( ${OpenCV_INCLUDE_DIRS} )
 
 # Add the main executable
 add_executable(main_enter src/main.cpp)
-
+target_include_directories(main_enter PRIVATE ${CMAKE_SOURCE_DIR}/libs/miniaudio)
 
 # Link libraries: cAudio, FTXUI, OpenAL
 target_link_libraries(main_enter
-  PRIVATE cAudio
   PRIVATE ftxui::screen
   PRIVATE ftxui::dom
   PRIVATE ftxui::component
-  ${OPENAL_LIBRARY}
-  PRIVATE cAp_mp3Decoder
+  # ${OPENAL_LIBRARY}
   PRIVATE tag
-  #${OpenCV_LIBS}
 )
 
 # Installation settings
-install(TARGETS main_enter RUNTIME DESTINATION bin)
+# install(TARGETS main_enter RUNTIME DESTINATION bin)

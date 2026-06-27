@@ -41,6 +41,7 @@ class FolderViewer
         }
 
         std::vector<std::string> folders;
+
         for (const auto& entry : directory_iterator(directorypath))
         {
             File file(entry.path().string());

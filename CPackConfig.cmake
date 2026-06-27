@@ -10,6 +10,8 @@
 # usually begin with CPACK_<GENNAME>_xxxx.
 
 
+set(CPACK_ARCHIVE_GID "-1")
+set(CPACK_ARCHIVE_UID "-1")
 set(CPACK_BUILD_SOURCE_DIRS "/home/anstrofon/Стільниця/c++/test;/home/anstrofon/Стільниця/c++/test")
 set(CPACK_CMAKE_GENERATOR "Unix Makefiles")
 set(CPACK_COMPONENT_UNSPECIFIED_HIDDEN "TRUE")

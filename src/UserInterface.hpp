@@ -32,7 +32,6 @@ using namespace ftxui;
  */
 class UserInterface
 {
-    cAudio::IAudioSource* mysound{};
     std::shared_ptr<AudioPlayer> _audio_player;
     Component btn_playing;
     Component folder_container;
@@ -49,10 +48,10 @@ class UserInterface
     std::atomic<bool> running{true}; // Контроль потоку
 
 
-    void initialize_ui_components(cAudio::IAudioManager* audioMgr)
+    void initialize_ui_components()
     {
         File _file(filename);
-        _audio_player = std::make_shared<AudioPlayer>(_file, audioMgr);
+        _audio_player = std::make_shared<AudioPlayer>(_file);
 
         btn_playing = _audio_player->get_button();
 
@@ -81,6 +80,7 @@ class UserInterface
             folder_container,
             favourites_container,
         });
+
         //final look
         rendered_ui = Renderer(main_container, [&]
         {
@@ -102,11 +102,10 @@ class UserInterface
 public:
 
     // initialize the general player's UI
-    UserInterface(std::string& filename, cAudio::IAudioManager* audioMgr)
+    UserInterface(std::string& filename)
     : filename(filename)
     {
-
-        initialize_ui_components(audioMgr);
+        initialize_ui_components();
         create_screen();
 
         auto screene = ScreenInteractive::FixedSize(LENGTH_X, LENGTH_Y);
@@ -128,6 +127,5 @@ public:
         // Зупиняємо потік після завершення
         running.store(false);
         std::cout << "\033[2J\033[H"; // ANSI-код для очищення екрана
-        delete mysound;
     }
 };

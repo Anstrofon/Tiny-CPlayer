@@ -12,7 +12,7 @@
 #include <ftxui/screen/screen.hpp>
 #include "ftxui/component/screen_interactive.hpp"
 
-#include "cAudio/cAudio.h" /* usr/local/include/cAudio */
+#include "miniaudio.h"
 
 #include "taglib/fileref.h"
 #include "taglib/tag.h"
@@ -20,18 +20,78 @@
 #include "Timer.hpp"
 #include "File.hpp"
 
+
+struct AudioEngine
+{
+    bool available = false;
+    bool is_stopped = true;
+    bool sound_initialized = false;
+
+    AudioEngine()
+    {
+        available = ma_engine_init(NULL, &engine) == MA_SUCCESS;
+    }
+
+    ~AudioEngine()
+    {
+        if (sound_initialized)
+        {
+            ma_sound_uninit(&sound); // Спочатку видаляємо звук
+        }
+        if(available)
+        {
+            ma_engine_uninit(&engine);
+        }
+    }
+
+    void set_file(const File& file)
+    {
+        if (sound_initialized)
+        {
+            ma_sound_uninit(&sound);
+        }
+
+        ma_result result = ma_sound_init_from_file(&engine, file.get_path().c_str(), 0, NULL, NULL, &sound);
+        sound_initialized = (result == MA_SUCCESS);
+    }
+
+    void stop()
+    {
+        is_stopped = true;
+        ma_sound_reset_start_time(&sound);
+    }
+
+    void play()
+    {
+        ma_sound_start(&sound);
+        is_stopped = false;
+    }
+
+    void seek(const float& seconds)
+    {
+        ma_uint64 current_frame;
+        ma_sound_get_cursor_in_pcm_frames(&sound, &current_frame);
+        ma_sound_seek_to_pcm_frame(&sound, current_frame + (44100 * seconds));
+    }
+
+    void pause()
+    {
+        ma_sound_stop(&sound);
+        is_stopped = true;
+    }
+private:
+    File file;
+    ma_engine engine;
+    ma_sound sound;
+};
+
 class AudioPlayer
 {
-    std::string label = " ▶ ";
-
-    int final_seconds = 0;
-    cAudio::IAudioSource* mysound;
-
     ftxui::Component btn_playing;
-    cAudio::IAudioManager* audioMgr;
-
+    AudioEngine mysound;
     File filename;
-
+    std::string label = " ▶ ";
+    int final_seconds = 0;
 
 public:
 
@@ -60,18 +120,20 @@ public:
 
     void rewind(const float&& seconds)
     {
-        if (mysound == nullptr) return;
+        if (!mysound.available || !mysound.sound_initialized) return;
 
         float current_seconds = timer.elapsedSeconds();
 
         if (current_seconds + seconds > final_seconds || current_seconds + seconds < 0)  return;
 
-        mysound->seek(seconds, true);
+        mysound.seek( /*current_seconds +*/ seconds);
         timer.add_seconds(seconds);
     }
+
+
     float progress_bar(bool set_progress = false)
     {
-        if (mysound == nullptr) return 0;
+        if (!mysound.available || !mysound.sound_initialized) return 0;
 
         TagLib::FileRef file(filename.get_path().c_str());
 
@@ -95,7 +157,7 @@ public:
 
     std::string time_stamp_audio()
     {
-        if(mysound == nullptr)
+        if(!mysound.available || !mysound.sound_initialized)
         {
             return "00:00";
         }
@@ -131,11 +193,11 @@ public:
 
     void play_button()
     {
-        if (mysound == nullptr) return;
+        if (!mysound.available || !mysound.sound_initialized) return;
 
         if (label == " ▶ ")
         {
-            mysound->play2d(false);
+            mysound.play();
             if (first_run)
             {
                 timer.reset();
@@ -150,22 +212,18 @@ public:
         }
         else
         {
-            mysound->pause();
+            mysound.pause();
             timer.pause();
             label = " ▶ ";
         }
     }
 
-    AudioPlayer(const File& filename, cAudio::IAudioManager* audioMgr) :
-        filename(filename), audioMgr(audioMgr), first_run(true)
+    AudioPlayer(const File& filename) :
+        filename(filename), first_run(true)
     {
         if(this->filename.is_audio())
         {
-            mysound = audioMgr->create("song", filename.get_path().c_str(),true);
-        }
-        else
-        {
-            mysound = nullptr;
+            mysound.set_file(filename);
         }
 
         //set button interactions
@@ -180,15 +238,15 @@ public:
     {
         this->filename = filename;
 
-        if (mysound != nullptr)
+        if (mysound.available)
         {
-            if(!mysound->isStopped())
+            if(!mysound.is_stopped)
             {
-                mysound->stop();
+                mysound.stop();
             }
         }
 
-        mysound = audioMgr->create("song", filename.get_path().c_str(),true);
+        mysound.set_file(filename);
         timer.reset();
         first_run = true;
     }
@@ -196,5 +254,13 @@ public:
     ftxui::Component get_button()
     {
         return btn_playing;
+    }
+
+    ~AudioPlayer()
+    {
+        if (mysound.available)
+        {
+            mysound.stop();
+        }
     }
 };
