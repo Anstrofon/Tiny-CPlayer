@@ -3,6 +3,7 @@
 #define LENGTH_Y 20
 
 #include <string>
+#include <cmath>
 
 #include "ftxui/component/component.hpp"
 #include <ftxui/component/component_base.hpp>
@@ -90,11 +91,11 @@ struct AudioEngine
 
     float get_current_seconds()
     {
-        ma_uint32 sample_rate;
+        ma_uint32 sample_rate = 44100;
         ma_sound_get_data_format(&sound, NULL, NULL, &sample_rate, NULL, 0);
-        ma_uint64 current_frame;
+        if (sample_rate == 0) sample_rate = 44100;
+        ma_uint64 current_frame = 0;
         ma_sound_get_cursor_in_pcm_frames(&sound, &current_frame);
-        // 3. Рахуємо точні секунди (обов'язково кастуємо до float)
         return static_cast<float>(current_frame) / sample_rate;
     }
 
@@ -132,6 +133,13 @@ public:
     void set_title(const File& file)
     {
         TagLib::FileRef fileref(file.get_path().c_str());
+        if (fileref.isNull() || fileref.tag() == nullptr)
+        {
+            title = file.get_filename();
+            final_seconds = 0;
+            return;
+        }
+        
         if(fileref.tag()->title().isEmpty())
         {
             title = file.get_filename();
@@ -142,7 +150,7 @@ public:
         }
         TagLib::AudioProperties *properties = fileref.audioProperties();
 
-        final_seconds = properties->lengthInSeconds();
+        final_seconds = properties ? properties->lengthInSeconds() : 0;
     }
 
     void rewind(const float&& seconds)
@@ -180,7 +188,7 @@ public:
             }
         }
         
-        if (progress < 0.0f) progress = 0.0f;
+        if (std::isnan(progress) || progress < 0.0f) progress = 0.0f;
         if (progress > 1.0f) progress = 1.0f;
 
         return progress;

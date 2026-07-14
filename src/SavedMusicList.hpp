@@ -175,7 +175,7 @@ public:
 
     void interact_with_selected_file()
     {
-        if(favourites.empty())
+        if(favourites.empty() || selected_file < 0 || selected_file >= favourites.size())
         {
             return;
         }

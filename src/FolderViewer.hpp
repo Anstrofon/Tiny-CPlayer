@@ -86,6 +86,10 @@ class FolderViewer
 
     void interact_with_selected_file()
     {
+        if (filelist.empty() || selected_file < 0 || selected_file >= filelist.size())
+        {
+            return;
+        }
         File file(directorypath.string() + "/" + filelist[selected_file]);
 
         if(file.is_audio() && observer.lock())
