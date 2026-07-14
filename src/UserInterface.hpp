@@ -46,7 +46,7 @@ class UserInterface
     std::string filename;
 
     std::atomic<bool> running{true}; // Контроль потоку
-
+    ScreenInteractive screene;
 
     void initialize_ui_components()
     {
@@ -103,12 +103,10 @@ public:
 
     // initialize the general player's UI
     UserInterface(std::string& filename)
-    : filename(filename)
+    : filename(filename), screene(ScreenInteractive::FixedSize(LENGTH_X, LENGTH_Y))
     {
         initialize_ui_components();
         create_screen();
-
-        auto screene = ScreenInteractive::FixedSize(LENGTH_X, LENGTH_Y);
 
         // Потік для регулярного оновлення
         std::thread([&]()

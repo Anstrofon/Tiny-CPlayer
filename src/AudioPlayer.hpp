@@ -40,6 +40,7 @@ struct AudioEngine
         }
         if(available)
         {
+            ma_engine_stop(&engine);
             ma_engine_uninit(&engine);
         }
     }
@@ -58,7 +59,9 @@ struct AudioEngine
     void stop()
     {
         is_stopped = true;
-        ma_sound_reset_start_time(&sound);
+
+        ma_sound_stop(&sound);
+        ma_sound_seek_to_pcm_frame(&sound, 0);
     }
 
     void play()
@@ -71,7 +74,28 @@ struct AudioEngine
     {
         ma_uint64 current_frame;
         ma_sound_get_cursor_in_pcm_frames(&sound, &current_frame);
-        ma_sound_seek_to_pcm_frame(&sound, current_frame + (44100 * seconds));
+
+        ma_uint32 sample_rate;
+        ma_sound_get_data_format(&sound, NULL, NULL, &sample_rate, NULL, 0);
+
+        long long offset = static_cast<long long>(sample_rate * seconds);
+        long long new_frame = static_cast<long long>(current_frame) + offset;
+        
+        if (new_frame < 0) {
+            new_frame = 0;
+        }
+
+        ma_sound_seek_to_pcm_frame(&sound, static_cast<ma_uint64>(new_frame));
+    }
+
+    float get_current_seconds()
+    {
+        ma_uint32 sample_rate;
+        ma_sound_get_data_format(&sound, NULL, NULL, &sample_rate, NULL, 0);
+        ma_uint64 current_frame;
+        ma_sound_get_cursor_in_pcm_frames(&sound, &current_frame);
+        // 3. Рахуємо точні секунди (обов'язково кастуємо до float)
+        return static_cast<float>(current_frame) / sample_rate;
     }
 
     void pause()
@@ -116,6 +140,9 @@ public:
         {
             title = fileref.tag()->title().toCString(true);
         }
+        TagLib::AudioProperties *properties = fileref.audioProperties();
+
+        final_seconds = properties->lengthInSeconds();
     }
 
     void rewind(const float&& seconds)
@@ -127,31 +154,35 @@ public:
         if (current_seconds + seconds > final_seconds || current_seconds + seconds < 0)  return;
 
         mysound.seek(seconds);
-        timer.add_seconds(seconds);
+
+        timer.set_seconds(mysound.get_current_seconds());
+        //timer.add_seconds(seconds);
     }
 
 
     float progress_bar(bool set_progress = false)
     {
-        if (!mysound.available || !mysound.sound_initialized) return 0;
-
-        TagLib::FileRef file(filename.get_path().c_str());
-
-        TagLib::AudioProperties *properties = file.audioProperties();
-
-        final_seconds = properties->lengthInSeconds();
+        if (!mysound.available || !mysound.sound_initialized || final_seconds <= 0) return 0.0f;
 
         int current_seconds = static_cast<int>(timer.elapsedSeconds());
 
         float progress = static_cast<float>(current_seconds) / final_seconds;
 
-        if (progress == 1 || first_run) /* stop player, when sound ends */
+        if (progress >= 1.0f || first_run) /* stop player, when sound ends */
         {
             label = " ▶ ";
-            progress = 0;
+            progress = 0.0f;
             timer.pause();
             first_run = true;
+            if (!mysound.is_stopped)
+            {
+                mysound.stop();
+            }
         }
+        
+        if (progress < 0.0f) progress = 0.0f;
+        if (progress > 1.0f) progress = 1.0f;
+
         return progress;
     }
 
@@ -162,12 +193,13 @@ public:
             return "00:00";
         }
 
-        TagLib::FileRef file(filename.get_path().c_str());
+        // TagLib::FileRef file(filename.get_path().c_str());
 
-        properties = file.audioProperties();
+        // properties = file.audioProperties();
 
-        int seconds = properties->lengthInSeconds() % 60;
-        int minutes = (properties->lengthInSeconds() - seconds) / 60;
+        int seconds = final_seconds % 60;
+        int minutes = (final_seconds - seconds) / 60;
+
 
         std::string result;
         if(minutes < 10)

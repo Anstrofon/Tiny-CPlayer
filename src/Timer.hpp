@@ -31,6 +31,13 @@ public:
         }
     }
 
+    void set_seconds(float seconds) {
+        if (is_running) {
+            start_time = std::chrono::high_resolution_clock::now();
+        }
+        accumulated_time = seconds;
+    }
+
     void add_seconds(float seconds) {
         if (is_running)
         {
