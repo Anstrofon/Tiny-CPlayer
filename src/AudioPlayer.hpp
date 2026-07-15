@@ -81,7 +81,7 @@ struct AudioEngine
 
         long long offset = static_cast<long long>(sample_rate * seconds);
         long long new_frame = static_cast<long long>(current_frame) + offset;
-        
+
         if (new_frame < 0) {
             new_frame = 0;
         }
@@ -139,7 +139,7 @@ public:
             final_seconds = 0;
             return;
         }
-        
+
         if(fileref.tag()->title().isEmpty())
         {
             title = file.get_filename();
@@ -163,8 +163,7 @@ public:
 
         mysound.seek(seconds);
 
-        timer.set_seconds(mysound.get_current_seconds());
-        //timer.add_seconds(seconds);
+        timer.set_seconds(mysound.get_current_seconds()); //timer.add_seconds(seconds);
     }
 
 
@@ -187,7 +186,7 @@ public:
                 mysound.stop();
             }
         }
-        
+
         if (std::isnan(progress) || progress < 0.0f) progress = 0.0f;
         if (progress > 1.0f) progress = 1.0f;
 
@@ -201,13 +200,8 @@ public:
             return "00:00";
         }
 
-        // TagLib::FileRef file(filename.get_path().c_str());
-
-        // properties = file.audioProperties();
-
         int seconds = final_seconds % 60;
         int minutes = (final_seconds - seconds) / 60;
-
 
         std::string result;
         if(minutes < 10)

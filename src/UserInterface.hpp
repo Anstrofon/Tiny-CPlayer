@@ -47,6 +47,7 @@ class UserInterface
 
     std::atomic<bool> running{true}; // Контроль потоку
     ScreenInteractive screene;
+    std::thread update_thread; // Зберігаємо потік (не detach!)
 
     void initialize_ui_components()
     {
@@ -108,22 +109,26 @@ public:
         initialize_ui_components();
         create_screen();
 
-        // Потік для регулярного оновлення
-        std::thread([&]()
+        // Потік для регулярного оновлення (joinable, не detach)
+        update_thread = std::thread([&]()
         {
             while (running.load())
             {
                 screene.PostEvent(Event::Custom); // Викликаємо оновлення
                 std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Затримка 50 мс
             }
-        }).detach();
+        });
         screene.Loop(rendered_ui);  /* yes, it's looping inside the class ui -_- */
     }
 
     ~UserInterface()
     {
-        // Зупиняємо потік після завершення
+        // Спочатку зупиняємо потік, щоб він не звертався до screene після її знищення
         running.store(false);
+        if (update_thread.joinable())
+        {
+            update_thread.join(); // Чекаємо завершення (не більше ~50ms)
+        }
         std::cout << "\033[2J\033[H"; // ANSI-код для очищення екрана
     }
 };

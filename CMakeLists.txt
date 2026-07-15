@@ -4,7 +4,6 @@ project(tiny_cplayer LANGUAGES CXX VERSION 0.2.0)
 
 include(FetchContent)
 
-# Fetch and make available FTXUI
 set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
@@ -12,30 +11,27 @@ FetchContent_Declare(ftxui
 )
 FetchContent_MakeAvailable(ftxui)
 
-
-#add_subdirectory(${CMAKE_SOURCE_DIR}/taglib)
-
-# Find and include OpenAL library
-# find_package(OpenAL REQUIRED)
-# if(NOT OpenAL_FOUND)
-#     set(OPENAL_INCLUDE_DIR /usr/include/AL)
-#     set(OPENAL_LIBRARY /usr/lib/libopenal.so)
-# endif()
-
-
-
 find_package(Taglib REQUIRED)
+if(NOT TagLib_FOUND AND NOT TAGLIB_FOUND)
+    message(STATUS "TagLib not found on system. Fetching from GitHub...")
+    set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
 
-# Add the main executable
+    FetchContent_Declare(
+        taglib
+        GIT_REPOSITORY https://github.com/taglib/taglib.git
+        GIT_TAG        v2.0.1
+    )
+    FetchContent_MakeAvailable(taglib)
+endif()
+
 add_executable(main_enter src/main.cpp)
 target_include_directories(main_enter PRIVATE ${CMAKE_SOURCE_DIR}/libs/miniaudio)
 
-# Link libraries: cAudio, FTXUI, OpenAL
 target_link_libraries(main_enter
   PRIVATE ftxui::screen
   PRIVATE ftxui::dom
   PRIVATE ftxui::component
-  # ${OPENAL_LIBRARY}
   PRIVATE tag
 )
 
