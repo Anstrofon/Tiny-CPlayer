@@ -11,7 +11,9 @@ FetchContent_Declare(ftxui
 )
 FetchContent_MakeAvailable(ftxui)
 
-find_package(Taglib REQUIRED)
+find_package(Taglib QUIET)
+find_package(TagLib QUIET)
+
 if(NOT TagLib_FOUND AND NOT TAGLIB_FOUND)
     message(STATUS "TagLib not found on system. Fetching from GitHub...")
     set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
