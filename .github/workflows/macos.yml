@@ -10,18 +10,18 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: prepare
-      run: |
-        make prepare
-    - name: configure
-      run: |
-        cmake -H. -Bbuild -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug"
-    - name: building
-      run: |
-        cmake --build build --config Debug --target unit_tests -j4
-    - name: testing
-      run: |
-        cd build
-        cd tests
-        ./unit_tests
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure CMake
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --config Release --target main_enter -j4
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: tiny-cplayer-macos
+        path: build/main_enter
+
