@@ -28,7 +28,7 @@ if(NOT TagLib_FOUND AND NOT TAGLIB_FOUND)
 endif()
 
 add_executable(main_enter src/main.cpp)
-target_include_directories(main_enter PRIVATE ${CMAKE_SOURCE_DIR}/libs/miniaudio)
+target_include_directories(main_enter PRIVATE ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/libs/miniaudio)
 
 target_link_libraries(main_enter
   PRIVATE ftxui::screen
