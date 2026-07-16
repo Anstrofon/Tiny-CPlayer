@@ -65,9 +65,11 @@ target_link_libraries(main_enter
 # install(TARGETS main_enter RUNTIME DESTINATION bin)
 
 # --- Testing ---
+set(BUILD_TESTING ON CACHE BOOL "" FORCE)
 include(CTest)
 option(TINY_CPLAYER_TESTS "Build tests for tiny_cplayer" ON)
 if(TINY_CPLAYER_TESTS)
+
     # Fetch GoogleTest
     FetchContent_Declare(
       googletest
