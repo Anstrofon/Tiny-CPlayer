@@ -15,9 +15,7 @@
 
 #include "libs/miniaudio/miniaudio.h"
 
-#include "taglib/fileref.h"
-#include "taglib/tag.h"
-
+#include "MetadataParser.hpp"
 #include "Timer.hpp"
 #include "File.hpp"
 
@@ -126,31 +124,14 @@ public:
     }
     bool first_run;
     Timer timer;
-    TagLib::AudioProperties *properties;
 
     std::string title = " ";
 
     void set_title(const File& file)
     {
-        TagLib::FileRef fileref(file.get_path().c_str());
-        if (fileref.isNull() || fileref.tag() == nullptr)
-        {
-            title = file.get_filename();
-            final_seconds = 0;
-            return;
-        }
-
-        if(fileref.tag()->title().isEmpty())
-        {
-            title = file.get_filename();
-        }
-        else
-        {
-            title = fileref.tag()->title().toCString(true);
-        }
-        TagLib::AudioProperties *properties = fileref.audioProperties();
-
-        final_seconds = properties ? properties->lengthInSeconds() : 0;
+        AudioMetadata metadata = MetadataParser::parse(file);
+        title = metadata.title;
+        final_seconds = metadata.length_in_seconds;
     }
 
     void rewind(const float&& seconds)
