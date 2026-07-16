@@ -25,6 +25,13 @@ if(NOT TagLib_FOUND AND NOT TAGLIB_FOUND)
         GIT_TAG        v2.0.1
     )
     FetchContent_MakeAvailable(taglib)
+
+    # TagLib's CMake does not specify BUILD_INTERFACE for subprojects/FetchContent.
+    # Add source and binary directories to target 'tag' interface:
+    target_include_directories(tag INTERFACE
+        $<BUILD_INTERFACE:${taglib_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${taglib_BINARY_DIR}>
+    )
 endif()
 
 add_executable(main_enter src/main.cpp)
