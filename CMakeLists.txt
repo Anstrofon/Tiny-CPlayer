@@ -63,3 +63,36 @@ target_link_libraries(main_enter
 
 # Installation settings
 # install(TARGETS main_enter RUNTIME DESTINATION bin)
+
+# --- Testing ---
+include(CTest)
+option(TINY_CPLAYER_TESTS "Build tests for tiny_cplayer" ON)
+if(TINY_CPLAYER_TESTS)
+    # Fetch GoogleTest
+    FetchContent_Declare(
+      googletest
+      GIT_REPOSITORY https://github.com/google/googletest.git
+      GIT_TAG        release-1.12.1
+    )
+    # For Windows: Prevent overriding the parent project's compiler/linker settings
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googletest)
+
+    # File Unit Test
+    add_executable(test_file tests/test_file.cpp)
+    target_include_directories(test_file PRIVATE ${CMAKE_SOURCE_DIR}/src)
+    target_link_libraries(test_file gtest_main)
+    add_test(NAME test_file COMMAND test_file)
+
+    # Timer Unit Test
+    add_executable(test_timer tests/test_timer.cpp)
+    target_include_directories(test_timer PRIVATE ${CMAKE_SOURCE_DIR}/src)
+    target_link_libraries(test_timer gtest_main)
+    add_test(NAME test_timer COMMAND test_timer)
+
+    # Audio Metadata Integration Test
+    add_executable(test_audio_metadata tests/test_audio_metadata.cpp)
+    target_include_directories(test_audio_metadata PRIVATE ${CMAKE_SOURCE_DIR}/src)
+    target_link_libraries(test_audio_metadata gtest_main tag)
+    add_test(NAME test_audio_metadata COMMAND test_audio_metadata)
+endif()

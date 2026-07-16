@@ -17,11 +17,15 @@ jobs:
       run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
     - name: Build
-      run: cmake --build build --config Release --target main_enter -j4
+      run: cmake --build build --config Release -j4
+
+    - name: Run tests
+      run: ctest --test-dir build -C Release --output-on-failure
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: tiny-cplayer-macos
         path: build/main_enter
+
 
