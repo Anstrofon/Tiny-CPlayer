@@ -60,7 +60,10 @@ if(NOT TagLib_FOUND AND NOT TAGLIB_FOUND)
         $<BUILD_INTERFACE:${taglib_BINARY_DIR}>
         $<BUILD_INTERFACE:${taglib_BINARY_DIR}/taglib>
     )
+
+    target_compile_definitions(tag INTERFACE TAGLIB_STATIC)
 endif()
+
 
 add_executable(main_enter src/main.cpp)
 target_include_directories(main_enter PRIVATE ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/libs/miniaudio)

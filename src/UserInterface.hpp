@@ -13,8 +13,6 @@
 #include "ftxui/component/screen_interactive.hpp"
 
 
-#include "taglib/fileref.h"
-#include "taglib/tag.h"
 #include "FolderViewer.hpp"
 #include "SavedMusicList.hpp"
 
@@ -38,7 +36,6 @@ class UserInterface
     Component rendered_ui;
     Component favourites_btn;
     Component favourites_container;
-    // initialize the general player's UI
     FolderViewer _folder_viewer;
     SavedMusicList _favourites;
     std::string label = " ▶ ";
@@ -53,19 +50,16 @@ class UserInterface
     {
         File _file(filename);
         _audio_player = std::make_shared<AudioPlayer>(_file);
-
         btn_playing = _audio_player->get_button();
 
         _folder_viewer = FolderViewer(_audio_player, _file.get_path());
-
-        _favourites = SavedMusicList(_audio_player);
-        favourites_btn = _favourites.get_button();
-
-        // Контейнер для навігації у папках
         folder_container = CatchEvent(_folder_viewer.get_layout(), [&](Event event)
         {
             return _folder_viewer.input_to_filelist_menu(event);
         });
+
+        _favourites = SavedMusicList(_audio_player);
+        favourites_btn = _favourites.get_button();
         favourites_container = CatchEvent(_favourites.get_layout(), [&](Event event)
         {
             return _favourites.input_to_favourites_menu(event);
@@ -73,7 +67,6 @@ class UserInterface
     }
     void create_screen()
     {
-        // Об'єднання контейнерів в один
         auto main_container = Container::Vertical(
         {
             btn_playing,
@@ -103,19 +96,18 @@ class UserInterface
 public:
 
     // initialize the general player's UI
-    UserInterface(std::string& filename)
-    : filename(filename), screene(ScreenInteractive::FixedSize(LENGTH_X, LENGTH_Y))
+    UserInterface(std::string& filename) : filename(filename),
+      screene(ScreenInteractive::FixedSize(LENGTH_X, LENGTH_Y))
     {
         initialize_ui_components();
         create_screen();
 
-        // Потік для регулярного оновлення (joinable, не detach)
         update_thread = std::thread([&]()
         {
             while (running.load())
             {
-                screene.PostEvent(Event::Custom); // Викликаємо оновлення
-                std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Затримка 50 мс
+                screene.PostEvent(Event::Custom);
+                std::this_thread::sleep_for(std::chrono::milliseconds(50));
             }
         });
         screene.Loop(rendered_ui);  /* yes, it's looping inside the class ui -_- */
@@ -123,11 +115,10 @@ public:
 
     ~UserInterface()
     {
-        // Спочатку зупиняємо потік, щоб він не звертався до screene після її знищення
         running.store(false);
         if (update_thread.joinable())
         {
-            update_thread.join(); // Чекаємо завершення (не більше ~50ms)
+            update_thread.join();
         }
         std::cout << "\033[2J\033[H"; // ANSI-код для очищення екрана
     }
