@@ -17,11 +17,18 @@ class SavedMusicList
     int selected_file = -1;
     bool menu_2_show = false;
 
-    void reload_txt()
+    std::string get_home_directory() const
     {
         const char* home = getenv("HOME");
-        std::filesystem::path path = std::filesystem::path(home) / ".local/share/terminal-audioplayer";
+        if (!home) home = getenv("USERPROFILE");
+        return home ? home : ".";
+    }
+
+    void reload_txt()
+    {
+        std::filesystem::path path = std::filesystem::path(get_home_directory()) / ".local/share/terminal-audioplayer";
         std::filesystem::create_directories(path); // якщо ще нема, створюємо
+
         std::string list = (path / "favorites.txt").string();
         std::ofstream text(list);
         if(text.is_open())
@@ -83,9 +90,9 @@ class SavedMusicList
     void save_favourites(const File& file)
     {
         // TODO: зберегти в файл
-        const char* home = getenv("HOME");
-        std::filesystem::path path = std::filesystem::path(home) / ".local/share/terminal-audioplayer";
+        std::filesystem::path path = std::filesystem::path(get_home_directory()) / ".local/share/terminal-audioplayer";
         std::filesystem::create_directories(path); // якщо ще нема, створюємо
+
         std::string list = (path / "favorites.txt").string();
         std::ofstream text(list);
         if(text.is_open())
@@ -98,10 +105,9 @@ class SavedMusicList
     void load_favourites()
     {
         // TODO: завантажити з файлу
-        const char* home = getenv("HOME");
-
-        std::filesystem::path path = std::filesystem::path(home) / ".local/share/terminal-audioplayer";
+        std::filesystem::path path = std::filesystem::path(get_home_directory()) / ".local/share/terminal-audioplayer";
         std::filesystem::create_directories(path); // якщо ще нема, створюємо
+
 
         std::string list = (path / "favorites.txt").string();
         std::ifstream text(list);

@@ -52,8 +52,9 @@ class FolderViewer
             }
             else if(is_directory(entry))
             {
-                folders.emplace_back( entry.path().filename());
+                folders.emplace_back(entry.path().filename().string());
             }
+
         }
         for(const std::string& folder : folders)
         {
